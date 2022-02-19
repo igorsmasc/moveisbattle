@@ -18,7 +18,7 @@ public class MovieDTO {
         this.title = title;
     }
 
-    MovieDTO fromDomain(Movie movie) {
+    public static MovieDTO fromDomain(Movie movie) {
         return MovieDTO.builder().id(movie.getId()).title(movie.getTitle()).build();
     }
 }

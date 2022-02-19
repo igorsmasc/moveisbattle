@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface GameService {
     Question startGame(String id);
-    Question generateQuestion(String gameId);
+    Question generateQuestion(Game game);
     ResponseEntity<?> guess(GuessResquest guessResquest);
 
     Game saveGame(Game game);

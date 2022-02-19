@@ -21,8 +21,9 @@ public class Game implements Serializable {
     private String userId;
     private Integer wrongAnswers = 0;
     private Integer rightAnswers = 0;
-    private String lastQuestion = ""; //hash único de duas questões que não pode se repetir e é gerado dps do guess
+    private String lastQuestion = "";
     private String previousQuestions = "";
+
 
     public Game(String userId) {
         this.userId = userId;

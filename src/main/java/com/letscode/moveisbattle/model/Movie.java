@@ -16,16 +16,18 @@ import javax.persistence.Id;
 @Builder
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String id;
+    private String imdbId;
     private String title;
     private Integer year;
     private Double rating;
     private String genre;
     private String type;
 
-    public Movie(String id, String title, Integer year, Double rating, String genre, String type) {
+    public Movie(String id, String imdbId, String title, Integer year, Double rating, String genre, String type) {
         this.id = id;
+        this.imdbId = imdbId;
         this.title = title;
         this.year = year;
         this.rating = rating;

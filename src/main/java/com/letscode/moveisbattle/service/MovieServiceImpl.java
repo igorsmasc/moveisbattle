@@ -2,6 +2,7 @@ package com.letscode.moveisbattle.service;
 
 import com.letscode.moveisbattle.gateway.MoviesGateway;
 import com.letscode.moveisbattle.model.Movie;
+import com.letscode.moveisbattle.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +10,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
 
-    private final MoviesGateway moviesGateway;
+    private final MovieRepository movieRepository;
 
     @Override
     public Movie getMovie(String id) {;
-        if(id.equals("1")) {
-            return new Movie("1", "title", 2020, 9.0, "zzz", "zzz");
-        }
-
-        return new Movie("2", "title 2", 2020, 8.0, "zzz 2", "zz 2");
-
+       return movieRepository.getById(id);
     }
 }
