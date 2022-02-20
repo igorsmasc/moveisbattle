@@ -51,11 +51,11 @@ public class GameServiceImpl implements GameService {
         Game game = gameOptional.get();
         User user = userOptional.get();
 
-        if (game.getIsValidGame() == false) {
+        if (!game.isValidGame()) {
             return ResponseEntity.ok(game);
         }
 
-        game.setIsValidGame(false);
+        game.setValidGame(false);
         user.setGameAnswersStatus(game.getRightAnswers(), game.getWrongAnswers());
 
         saveGame(game);
@@ -96,7 +96,7 @@ public class GameServiceImpl implements GameService {
             return ResponseEntity.status(400).body(result);
         }
 
-        if (game.getIsValidGame()) {
+        if (game.isValidGame()) {
             String bestMovieId;
 
             if (movie01.getRating() > movie02.getRating()) {
@@ -115,14 +115,14 @@ public class GameServiceImpl implements GameService {
                 game.setWrongAnswers(game.getWrongAnswers() + 1);
 
                 if (game.getWrongAnswers() == 3) {
-                    game.setIsValidGame(false);
+                    game.setValidGame(false);
                 }
             }
         }
 
         result.setPoints(game.getRightAnswers());
 
-        if (game.getIsValidGame()) {
+        if (game.isValidGame()) {
             Question newQuestion = questionService.generateQuestion(game);
             game.setLastQuestion(newQuestion.getQuestionId());
             saveGame(game);

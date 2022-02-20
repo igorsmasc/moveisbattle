@@ -1,7 +1,6 @@
 package com.letscode.moveisbattle;
 
 import com.letscode.moveisbattle.model.Movie;
-import com.letscode.moveisbattle.model.User;
 import com.letscode.moveisbattle.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -37,7 +36,5 @@ public class MoveisbattleApplication implements CommandLineRunner {
 
         movieRepository.saveAll(Arrays.asList(m1, m2, m3, m4, m5, m6, m7));
 
-        User u1 = new User("Igor");
-        User u2 = new User("Amanda");
     }
 }

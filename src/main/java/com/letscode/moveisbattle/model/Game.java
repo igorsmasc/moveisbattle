@@ -24,7 +24,7 @@ public class Game implements Serializable {
     private Integer rightAnswers = 0;
     private String lastQuestionId = "";
     private String previousQuestions = "";
-    private Boolean isValidGame = true;
+    private boolean isValidGame = true;
 
     public Game(String userId) {
         this.userId = userId;
@@ -33,5 +33,13 @@ public class Game implements Serializable {
     public void setLastQuestion(String lastQuestion) {
         this.previousQuestions += lastQuestion + ";";
         this.lastQuestionId = lastQuestion;
+    }
+
+    public boolean isValidGame() {
+        return isValidGame;
+    }
+
+    public void setValidGame(boolean validGame) {
+        isValidGame = validGame;
     }
 }

@@ -10,8 +10,6 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-
-    @Query(nativeQuery = true, value = "SELECT * FROM USER ORDER BY USER_RATE DESC LIMIT :size")
+    @Query(nativeQuery = true, value = "SELECT * FROM USER ORDER BY SCORE DESC LIMIT :size")
     List<User> getRankingBySize(@Param("size") int size);
-
 }

@@ -22,7 +22,9 @@ public class User {
     private String name;
     private Integer allTimeRightAnswers;
     private Integer allTimeWrongAnswers;
+    private Integer quizzes;
     private Double userRate;
+    private Double score;
 
     public User(String name) {
         this.name = name;
@@ -31,6 +33,7 @@ public class User {
     public void setGameAnswersStatus(Integer rightAnswers, Integer wrongAnswers) {
         this.allTimeRightAnswers += rightAnswers;
         this.allTimeWrongAnswers += wrongAnswers;
+        this.quizzes += 1;
 
         Integer totalAnswers = allTimeRightAnswers + allTimeWrongAnswers;
 
@@ -38,6 +41,8 @@ public class User {
 
         Double calcRate = (Double.valueOf(allTimeRightAnswers) / totalAnswers) * 100;
         setUserRate(calcRate);
+
+        this.score = this.quizzes * this.userRate;
     }
 
 }
