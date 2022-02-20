@@ -3,18 +3,20 @@ package com.letscode.moveisbattle.service;
 import com.letscode.moveisbattle.dto.MovieDTO;
 import com.letscode.moveisbattle.model.Game;
 import com.letscode.moveisbattle.model.Question;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
 @Service
-@AllArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
 
     private final MovieService movieService;
 
-    private final Random rand = new Random();
+    private Random rand;
+
+    public QuestionServiceImpl(MovieService movieService) {
+        this.movieService = movieService;
+    }
 
     @Override
     public Question generateQuestion(Game game) {
@@ -28,7 +30,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 
         while (!validMovies) {
-
+            rand = new Random();
             m1 = rand.nextInt((7 - 1) + 1) + 1;
             m2 = rand.nextInt((7 - 1) + 1) + 1;
             questionHash01 = game.getId() + m1 + m2;
@@ -39,6 +41,6 @@ public class QuestionServiceImpl implements QuestionService {
             }
         }
 
-        return new Question(game.getId(), MovieDTO.fromDomain(movieService.getMovie(String.valueOf(m1))), MovieDTO.fromDomain(movieService.getMovie(String.valueOf(m2))));
+        return new Question(game.getId(), MovieDTO.fromDomain(movieService.getMovie(String.valueOf(m1)).get()), MovieDTO.fromDomain(movieService.getMovie(String.valueOf(m2)).get()));
     }
 }

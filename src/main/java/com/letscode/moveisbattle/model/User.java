@@ -20,11 +20,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String name;
-    private Integer allTimeRightAnswers;
-    private Integer allTimeWrongAnswers;
-    private Integer quizzes;
-    private Double userRate;
-    private Double score;
+    private Integer allTimeRightAnswers = 0;
+    private Integer allTimeWrongAnswers = 0;
+    private Integer quizzes = 0;
+    private Double userRate = 0.0;
+    private Double score = 0.0;
 
     public User(String name) {
         this.name = name;

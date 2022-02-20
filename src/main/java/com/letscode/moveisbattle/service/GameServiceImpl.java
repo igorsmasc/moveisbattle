@@ -86,8 +86,8 @@ public class GameServiceImpl implements GameService {
         }
 
         Game game = gameOptional.get();
-        Movie movie01 = movieService.getMovie(guessResquest.getMovie01());
-        Movie movie02 = movieService.getMovie(guessResquest.getMovie02());
+        Movie movie01 = movieService.getMovie(guessResquest.getMovie01()).get();
+        Movie movie02 = movieService.getMovie(guessResquest.getMovie02()).get();
         String questionHash = game.getId() + movie01.getId() + movie02.getId();
 
 

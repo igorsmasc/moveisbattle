@@ -5,6 +5,8 @@ import com.letscode.moveisbattle.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
@@ -12,7 +14,7 @@ public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
 
     @Override
-    public Movie getMovie(String id) {
-        return movieRepository.getById(id);
+    public Optional<Movie> getMovie(String id) {
+        return movieRepository.findById(id);
     }
 }
