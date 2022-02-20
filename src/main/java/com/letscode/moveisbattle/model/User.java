@@ -9,11 +9,8 @@ import javax.persistence.Id;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

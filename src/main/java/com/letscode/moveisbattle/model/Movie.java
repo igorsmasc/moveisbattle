@@ -8,11 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Getter
-@Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Builder
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

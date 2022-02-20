@@ -5,7 +5,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 public class Question {
     private String questionId;

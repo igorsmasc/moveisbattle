@@ -4,10 +4,7 @@ import com.letscode.moveisbattle.model.Movie;
 import lombok.*;
 
 @Getter
-@Setter
 @EqualsAndHashCode
-@NoArgsConstructor
-@ToString
 @Builder
 public class MovieDTO {
     private String id;
