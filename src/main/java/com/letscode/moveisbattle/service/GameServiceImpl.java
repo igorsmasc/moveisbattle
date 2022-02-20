@@ -44,10 +44,6 @@ public class GameServiceImpl implements GameService {
             return ResponseEntity.notFound().build();
         }
 
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
         Game game = gameOptional.get();
         User user = userOptional.get();
 

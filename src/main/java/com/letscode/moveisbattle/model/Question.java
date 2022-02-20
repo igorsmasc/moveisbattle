@@ -7,7 +7,6 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
-@ToString
 public class Question {
     private String questionId;
     private String gameId;
@@ -15,7 +14,7 @@ public class Question {
     private MovieDTO movie02;
 
     public Question(String gameId, MovieDTO movie01, MovieDTO movie02) {
-        this.questionId = gameId+movie01.getId()+movie02.getId();
+        this.questionId = gameId + movie01.getId() + movie02.getId();
         this.gameId = gameId;
         this.movie01 = movie01;
         this.movie02 = movie02;

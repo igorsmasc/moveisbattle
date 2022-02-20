@@ -4,10 +4,6 @@ import com.letscode.moveisbattle.model.Movie;
 import lombok.*;
 
 @Getter
-@Setter
-@EqualsAndHashCode
-@NoArgsConstructor
-@ToString
 public class MovieRequest {
     private String imdbID;
     private String title;

@@ -6,9 +6,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
-@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResultResponse {
     private String lastGuessResult;

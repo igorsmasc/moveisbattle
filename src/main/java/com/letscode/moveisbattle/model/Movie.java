@@ -11,7 +11,6 @@ import javax.persistence.Id;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
-@ToString
 @Entity
 @Builder
 public class Movie {

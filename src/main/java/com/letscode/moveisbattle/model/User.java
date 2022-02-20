@@ -12,7 +12,6 @@ import javax.persistence.Id;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Builder
 public class User {

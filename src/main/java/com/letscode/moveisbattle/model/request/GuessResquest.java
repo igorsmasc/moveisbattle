@@ -3,10 +3,6 @@ package com.letscode.moveisbattle.model.request;
 import lombok.*;
 
 @Getter
-@Setter
-@EqualsAndHashCode
-@NoArgsConstructor
-@ToString
 public class GuessResquest {
     private String gameId;
     private String movie01;
