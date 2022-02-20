@@ -11,16 +11,33 @@ import javax.persistence.Id;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Entity
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String name;
+    private Integer allTimeRightAnswers;
+    private Integer allTimeWrongAnswers;
+    private Double userRate;
 
-    public User(String id, String name) {
-        this.id = id;
+    public User(String name) {
         this.name = name;
     }
+
+    public void setGameAnswersStatus(Integer rightAnswers, Integer wrongAnswers) {
+        this.allTimeRightAnswers += rightAnswers;
+        this.allTimeWrongAnswers += wrongAnswers;
+
+        Integer totalAnswers = allTimeRightAnswers + allTimeWrongAnswers;
+
+        if (totalAnswers == 0) return;
+
+        Double calcRate = (Double.valueOf(allTimeRightAnswers) / totalAnswers) * 100;
+        setUserRate(calcRate);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.letscode.moveisbattle.controller;
 
+import com.letscode.moveisbattle.model.Game;
 import com.letscode.moveisbattle.model.Question;
 import com.letscode.moveisbattle.model.request.GuessResquest;
 import com.letscode.moveisbattle.model.response.ResultResponse;
@@ -23,7 +24,7 @@ public class GameController {
     }
 
     @PostMapping("/stop")
-    public Question stopGame() {
+    public ResponseEntity<Game> stopGame() {
         return gameService.stopGame("1", "1");
     }
 

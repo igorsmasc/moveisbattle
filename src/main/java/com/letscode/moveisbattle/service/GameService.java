@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface GameService {
     Question startGame(String userId);
 
-    Question stopGame(String userId, String gameId);
+    ResponseEntity<Game> stopGame(String userId, String gameId);
 
     Game saveGame(Game game);
 

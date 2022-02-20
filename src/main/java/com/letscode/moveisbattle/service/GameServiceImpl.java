@@ -3,6 +3,7 @@ package com.letscode.moveisbattle.service;
 import com.letscode.moveisbattle.model.Game;
 import com.letscode.moveisbattle.model.Movie;
 import com.letscode.moveisbattle.model.Question;
+import com.letscode.moveisbattle.model.User;
 import com.letscode.moveisbattle.model.request.GuessResquest;
 import com.letscode.moveisbattle.model.response.ResultResponse;
 import com.letscode.moveisbattle.repository.GameRepository;
@@ -19,6 +20,7 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
     private MovieService movieService;
     private QuestionService questionService;
+    private UserService userService;
 
     @Override
     public Question startGame(String userId) {
@@ -34,8 +36,32 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Question stopGame(String userId, String gameId) {
-        return null;
+    public ResponseEntity<Game> stopGame(String userId, String gameId) {
+        Optional<Game> gameOptional = getGame(gameId);
+        Optional<User> userOptional = userService.getUser(userId);
+
+        if (gameOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Game game = gameOptional.get();
+        User user = userOptional.get();
+
+        if (game.getIsValidGame() == false) {
+            return ResponseEntity.ok(game);
+        }
+
+        game.setIsValidGame(false);
+        user.setGameAnswersStatus(game.getRightAnswers(), game.getWrongAnswers());
+
+        saveGame(game);
+        userService.saveUser(user);
+
+        return ResponseEntity.ok(game);
     }
 
     @Override
@@ -60,7 +86,6 @@ public class GameServiceImpl implements GameService {
         }
 
         Game game = gameOptional.get();
-
         Movie movie01 = movieService.getMovie(guessResquest.getMovie01());
         Movie movie02 = movieService.getMovie(guessResquest.getMovie02());
         String questionHash = game.getId() + movie01.getId() + movie02.getId();
@@ -71,7 +96,7 @@ public class GameServiceImpl implements GameService {
             return ResponseEntity.status(400).body(result);
         }
 
-        if (game.getWrongAnswers() < 3) {
+        if (game.getIsValidGame()) {
             String bestMovieId;
 
             if (movie01.getRating() > movie02.getRating()) {
@@ -88,12 +113,16 @@ public class GameServiceImpl implements GameService {
             } else {
                 result.setLastGuessResult("Ooops! You was wrong!");
                 game.setWrongAnswers(game.getWrongAnswers() + 1);
+
+                if (game.getWrongAnswers() == 3) {
+                    game.setIsValidGame(false);
+                }
             }
         }
 
         result.setPoints(game.getRightAnswers());
 
-        if (game.getWrongAnswers() < 3) {
+        if (game.getIsValidGame()) {
             Question newQuestion = questionService.generateQuestion(game);
             game.setLastQuestion(newQuestion.getQuestionId());
             saveGame(game);
@@ -102,9 +131,8 @@ public class GameServiceImpl implements GameService {
         }
 
         saveGame(game);
-
         result.setGameStatus("Game Over!");
-
         return ResponseEntity.ok(result);
     }
+
 }
