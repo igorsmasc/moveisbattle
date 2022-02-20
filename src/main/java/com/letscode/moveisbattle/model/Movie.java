@@ -16,7 +16,7 @@ import javax.persistence.Id;
 @Builder
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String imdbId;
     private String title;

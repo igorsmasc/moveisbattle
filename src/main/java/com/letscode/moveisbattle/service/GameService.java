@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 
 public interface GameService {
-    Question startGame(String id);
+    Question startGame(String userId);
     Question generateQuestion(Game game);
     ResponseEntity<?> guess(GuessResquest guessResquest);
 

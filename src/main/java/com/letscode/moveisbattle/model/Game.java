@@ -24,7 +24,6 @@ public class Game implements Serializable {
     private String lastQuestion = "";
     private String previousQuestions = "";
 
-
     public Game(String userId) {
         this.userId = userId;
     }
