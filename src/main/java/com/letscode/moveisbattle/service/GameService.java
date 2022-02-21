@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 
 public interface GameService {
-    Question startGame(String userId);
+    Question startGame(Long userId);
 
-    ResponseEntity<Game> stopGame(String userId, String gameId);
+    ResponseEntity<Game> stopGame(Long userId, String gameId);
 
     Game saveGame(Game game);
 

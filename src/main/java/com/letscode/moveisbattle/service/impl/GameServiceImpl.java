@@ -1,12 +1,13 @@
-package com.letscode.moveisbattle.service;
+package com.letscode.moveisbattle.service.impl;
 
-import com.letscode.moveisbattle.model.Game;
-import com.letscode.moveisbattle.model.Movie;
-import com.letscode.moveisbattle.model.Question;
-import com.letscode.moveisbattle.model.User;
+import com.letscode.moveisbattle.model.*;
 import com.letscode.moveisbattle.model.request.GuessResquest;
 import com.letscode.moveisbattle.model.response.ResultResponse;
 import com.letscode.moveisbattle.repository.GameRepository;
+import com.letscode.moveisbattle.service.GameService;
+import com.letscode.moveisbattle.service.MovieService;
+import com.letscode.moveisbattle.service.QuestionService;
+import com.letscode.moveisbattle.service.UserStatusService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,10 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
     private MovieService movieService;
     private QuestionService questionService;
-    private UserService userService;
+    private UserStatusService userStatusService;
 
     @Override
-    public Question startGame(String userId) {
+    public Question startGame(Long userId) {
         Game game = new Game(userId);
         game = saveGame(game);
 
@@ -36,26 +37,30 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public ResponseEntity<Game> stopGame(String userId, String gameId) {
+    public ResponseEntity<Game> stopGame(Long userId, String gameId) {
         Optional<Game> gameOptional = getGame(gameId);
-        Optional<User> userOptional = userService.getUser(userId);
+        Optional<UserStatus> userStatusOptional = userStatusService.getUserStatus(userId);
 
         if (gameOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
+        if (gameOptional.isEmpty() || userStatusOptional.isEmpty()) {
+            throw new IllegalStateException("Game or UserStatus is invalid!");
+        }
+
         Game game = gameOptional.get();
-        User user = userOptional.get();
+        UserStatus userStatus = userStatusOptional.get();
 
         if (!game.isValidGame()) {
             return ResponseEntity.ok(game);
         }
 
         game.setValidGame(false);
-        user.setGameAnswersStatus(game.getRightAnswers(), game.getWrongAnswers());
+        userStatus.setGameAnswersStatus(game.getRightAnswers(), game.getWrongAnswers());
 
         saveGame(game);
-        userService.saveUser(user);
+        userStatusService.saveUserStatus(userStatus);
 
         return ResponseEntity.ok(game);
     }

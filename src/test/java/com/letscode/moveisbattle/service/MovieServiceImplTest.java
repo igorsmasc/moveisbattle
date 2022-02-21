@@ -2,6 +2,7 @@ package com.letscode.moveisbattle.service;
 
 import com.letscode.moveisbattle.model.Movie;
 import com.letscode.moveisbattle.repository.MovieRepository;
+import com.letscode.moveisbattle.service.impl.MovieServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

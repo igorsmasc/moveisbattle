@@ -20,12 +20,12 @@ public class GameController {
 
     @PostMapping("/start")
     public Question startGame() {
-        return gameService.startGame("1");
+        return gameService.startGame(1L);
     }
 
     @PostMapping("/stop")
     public ResponseEntity<Game> stopGame() {
-        return gameService.stopGame("1", "1");
+        return gameService.stopGame(1L, "1");
     }
 
     @PostMapping("/guess")

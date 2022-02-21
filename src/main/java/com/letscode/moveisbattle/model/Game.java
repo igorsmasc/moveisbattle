@@ -17,14 +17,14 @@ public class Game implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
-    private String userId;
+    private Long userId;
     private Integer wrongAnswers = 0;
     private Integer rightAnswers = 0;
     private String lastQuestionId = "";
     private String previousQuestions = "";
     private boolean isValidGame = true;
 
-    public Game(String userId) {
+    public Game(Long userId) {
         this.userId = userId;
     }
 

@@ -1,7 +1,7 @@
 package com.letscode.moveisbattle.controller;
 
-import com.letscode.moveisbattle.model.User;
-import com.letscode.moveisbattle.service.UserService;
+import com.letscode.moveisbattle.model.UserStatus;
+import com.letscode.moveisbattle.service.UserStatusService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,12 +12,14 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "users")
-public class UserController {
-    private final UserService userService;
+@RequestMapping(value = "users/status")
+public class UserStatusController {
+
+    private final UserStatusService userStatusService;
 
     @GetMapping("/ranking/{rankingSize}")
-    public List<User> getRanking(@PathVariable Integer rankingSize) {
-        return userService.getUserRanking(rankingSize);
+    public List<UserStatus> getRanking(@PathVariable Integer rankingSize) {
+        return userStatusService.getUserStatusRanking(rankingSize);
     }
+
 }

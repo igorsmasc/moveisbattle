@@ -1,14 +1,10 @@
 package com.letscode.moveisbattle.service;
 
-import com.letscode.moveisbattle.model.User;
+import com.letscode.moveisbattle.model.AppUser;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-import java.util.List;
-import java.util.Optional;
+public interface UserService extends UserDetailsService {
+    String signUpUser(AppUser appUser);
 
-public interface UserService {
-    Optional<User> getUser(String id);
-
-    User saveUser(User user);
-
-    List<User> getUserRanking(Integer rankingSize);
+    int enableAppUser(String email);
 }

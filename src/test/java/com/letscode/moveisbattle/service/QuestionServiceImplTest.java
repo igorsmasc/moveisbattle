@@ -1,10 +1,8 @@
 package com.letscode.moveisbattle.service;
 
 import com.letscode.moveisbattle.dto.MovieDTO;
-import com.letscode.moveisbattle.model.Game;
-import com.letscode.moveisbattle.model.Movie;
-import com.letscode.moveisbattle.model.Question;
-import com.letscode.moveisbattle.model.User;
+import com.letscode.moveisbattle.model.*;
+import com.letscode.moveisbattle.service.impl.QuestionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,10 +31,9 @@ public class QuestionServiceImplTest {
     @Test
     void carGenerateQuestion() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
 
         Movie m1 = new Movie("01", "id-imdb-01", "movie 01", 2020, 9.0, "genre", "type");

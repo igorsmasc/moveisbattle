@@ -1,29 +1,27 @@
 package com.letscode.moveisbattle.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class User {
+public class UserStatus {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
-    private String name;
+    private Long userId;
     private Integer allTimeRightAnswers = 0;
     private Integer allTimeWrongAnswers = 0;
     private Integer quizzes = 0;
     private Double userRate = 0.0;
     private Double score = 0.0;
 
-    public User(String name) {
-        this.name = name;
+    public UserStatus(Long userId) {
+        this.userId = userId;
     }
 
     public void setGameAnswersStatus(Integer rightAnswers, Integer wrongAnswers) {
@@ -40,5 +38,4 @@ public class User {
 
         this.score = this.quizzes * this.userRate;
     }
-
 }

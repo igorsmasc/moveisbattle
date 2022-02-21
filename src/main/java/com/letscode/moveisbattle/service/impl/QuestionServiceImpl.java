@@ -1,8 +1,10 @@
-package com.letscode.moveisbattle.service;
+package com.letscode.moveisbattle.service.impl;
 
 import com.letscode.moveisbattle.dto.MovieDTO;
 import com.letscode.moveisbattle.model.Game;
 import com.letscode.moveisbattle.model.Question;
+import com.letscode.moveisbattle.service.MovieService;
+import com.letscode.moveisbattle.service.QuestionService;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;

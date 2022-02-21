@@ -3,10 +3,11 @@ package com.letscode.moveisbattle.service;
 import com.letscode.moveisbattle.model.Game;
 import com.letscode.moveisbattle.model.Movie;
 import com.letscode.moveisbattle.model.Question;
-import com.letscode.moveisbattle.model.User;
+import com.letscode.moveisbattle.model.UserStatus;
 import com.letscode.moveisbattle.model.request.GuessResquest;
 import com.letscode.moveisbattle.model.response.ResultResponse;
 import com.letscode.moveisbattle.repository.GameRepository;
+import com.letscode.moveisbattle.service.impl.GameServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,33 +37,32 @@ public class GameServiceImplTest {
     private QuestionService questionService;
 
     @Mock
-    private UserService userService;
+    private UserStatusService userStatusService;
 
 
     private GameService underTest;
 
     @BeforeEach
     void setup() {
-        underTest = new GameServiceImpl(gameRepository, movieService, questionService, userService);
+        underTest = new GameServiceImpl(gameRepository, movieService, questionService, userStatusService);
     }
 
     @Test
     void shouldStartGame() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
         Question question = new Question();
         question.setQuestionId("1");
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
 
         given(questionService.generateQuestion(any())).willReturn(question);
         given(underTest.saveGame(any())).willReturn(game);
 
         // When
-        underTest.startGame(user.getId());
+        underTest.startGame(userStatus.getUserId());
 
         // Then
         ArgumentCaptor<Game> gameArgumentCaptor = ArgumentCaptor.forClass(Game.class);
@@ -72,23 +72,22 @@ public class GameServiceImplTest {
     @Test
     void shouldStopGameSuccessfully() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
 
         given(underTest.getGame(game.getId())).willReturn(Optional.of(game));
-        given(userService.getUser(user.getId())).willReturn(Optional.of(user));
+        given(userStatusService.getUserStatus(userStatus.getUserId())).willReturn(Optional.of(userStatus));
 
         // When
-        underTest.stopGame(user.getId(), game.getId());
+        underTest.stopGame(userStatus.getUserId(), game.getId());
 
         // Then
         ArgumentCaptor<Game> gameArgumentCaptor = ArgumentCaptor.forClass(Game.class);
-        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        ArgumentCaptor<UserStatus> userStatusArgumentCaptor = ArgumentCaptor.forClass(UserStatus.class);
         verify(gameRepository, times(1)).save(gameArgumentCaptor.capture());
-        verify(userService, times(1)).saveUser(userArgumentCaptor.capture());
+        verify(userStatusService, times(1)).saveUserStatus(userStatusArgumentCaptor.capture());
     }
 
     @Test
@@ -96,28 +95,26 @@ public class GameServiceImplTest {
         // Given
         String invalidGameId = "test-invalid-game-id";
 
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
         given(underTest.getGame(invalidGameId)).willReturn(Optional.empty());
-        given(userService.getUser(user.getId())).willReturn(Optional.of(user));
+        given(userStatusService.getUserStatus(userStatus.getUserId())).willReturn(Optional.of(userStatus));
 
         // When
-        ResponseEntity<Game> responseEntity = underTest.stopGame(user.getId(), invalidGameId);
+        ResponseEntity<Game> responseEntity = underTest.stopGame(userStatus.getUserId(), invalidGameId);
 
         // Then
         verify(gameRepository, times(0)).save(any());
-        verify(userService, times(0)).saveUser(any());
+        verify(userStatusService, times(0)).saveUserStatus(any());
         Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
     @Test
     void shouldReturnNotFoundWhenGuessAndGameDoesntExists() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-invalid-game-id");
         game.setLastQuestionId("test-game-id0102");
         game.setValidGame(true);
@@ -129,13 +126,13 @@ public class GameServiceImplTest {
 
 
         given(underTest.getGame(game.getId())).willReturn(Optional.empty());
- 
+
         // When
         ResponseEntity<ResultResponse> responseEntity = underTest.guess(guessResquest);
 
         // Then
         verify(gameRepository, times(0)).save(any());
-        verify(userService, times(0)).saveUser(any());
+        verify(userStatusService, times(0)).saveUserStatus(any());
         Assertions.assertEquals("Game not found", responseEntity.getBody().getGameStatus());
         Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
@@ -143,13 +140,12 @@ public class GameServiceImplTest {
     @Test
     void shouldReturnBadRequestWhenGameQuestionHashIsInvalid() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
         Question question = new Question();
         question.setQuestionId("1");
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
         game.setLastQuestionId("invalid-last-question-id");
         game.setValidGame(true);
@@ -173,32 +169,30 @@ public class GameServiceImplTest {
     @Test
     void shouldReturnWithoutActionsWhenGameIsInvalid() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
         game.setValidGame(false);
 
         given(underTest.getGame(game.getId())).willReturn(Optional.of(game));
-        given(userService.getUser(user.getId())).willReturn(Optional.of(user));
+        given(userStatusService.getUserStatus(userStatus.getUserId())).willReturn(Optional.of(userStatus));
 
         // When
-        ResponseEntity<Game> responseEntity = underTest.stopGame(user.getId(), game.getId());
+        ResponseEntity<Game> responseEntity = underTest.stopGame(userStatus.getUserId(), game.getId());
 
         // Then
         verify(gameRepository, times(0)).save(any());
-        verify(userService, times(0)).saveUser(any());
+        verify(userStatusService, times(0)).saveUserStatus(any());
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
     void shouldSaveGamSuccessfully() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
 
         // When
@@ -212,10 +206,9 @@ public class GameServiceImplTest {
     @Test
     void shouldGetGameSuccessfully() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
 
         // When
@@ -228,13 +221,12 @@ public class GameServiceImplTest {
     @Test
     void shouldGuessFirstMovieAndAnswerRightSuccessfully() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
         Question question = new Question();
         question.setQuestionId("1");
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
         game.setLastQuestionId("test-game-id0102");
         game.setValidGame(true);
@@ -265,13 +257,12 @@ public class GameServiceImplTest {
     @Test
     void shouldGuessSecondMovieAndAnswerRightSuccessfully() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
         Question question = new Question();
         question.setQuestionId("1");
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
         game.setLastQuestionId("test-game-id0102");
         game.setValidGame(true);
@@ -302,13 +293,12 @@ public class GameServiceImplTest {
     @Test
     void shouldGuessAndAnswerRightSuccessfullyWhenMoviesHasSameRate() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
         Question question = new Question();
         question.setQuestionId("1");
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
         game.setLastQuestionId("test-game-id0102");
         game.setValidGame(true);
@@ -339,13 +329,12 @@ public class GameServiceImplTest {
     @Test
     void shouldGuessAndAnswerWrongSuccessfully() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
         Question question = new Question();
         question.setQuestionId("1");
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
         game.setLastQuestionId("test-game-id0102");
         game.setValidGame(true);
@@ -375,13 +364,12 @@ public class GameServiceImplTest {
     @Test
     void shouldReturnGameOverWhenThreeWrongQuestions() {
         // Given
-        User user = new User("Test User");
-        user.setId("test-user-id");
+        UserStatus userStatus = new UserStatus(1L);
 
         Question question = new Question();
         question.setQuestionId("1");
 
-        Game game = new Game(user.getId());
+        Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
         game.setLastQuestionId("test-game-id0102");
         game.setValidGame(true);
@@ -408,5 +396,4 @@ public class GameServiceImplTest {
         Assertions.assertEquals("Ooops! You was wrong!", responseEntity.getBody().getLastGuessResult());
         Assertions.assertEquals("Game Over!", responseEntity.getBody().getGameStatus());
     }
-
 }
