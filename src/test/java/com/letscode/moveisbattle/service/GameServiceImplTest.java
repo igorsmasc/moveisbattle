@@ -307,6 +307,7 @@ class GameServiceImplTest {
     }
 
     @Test
+
     void shouldGuessSecondMovieAndAnswerRightSuccessfully() {
         // Given
         UserStatus userStatus = new UserStatus(1L);
