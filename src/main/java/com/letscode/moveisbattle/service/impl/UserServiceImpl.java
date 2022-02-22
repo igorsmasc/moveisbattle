@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -57,8 +56,7 @@ public class UserServiceImpl implements UserService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        NewUserDTO newUserDTO = new NewUserDTO(savedUser.getId(), token);
-        return newUserDTO;
+        return new NewUserDTO(savedUser.getId(), token);
     }
 
     @Override

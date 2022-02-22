@@ -1,7 +1,6 @@
 package com.letscode.moveisbattle.controller;
 
 import com.letscode.moveisbattle.model.AppUser;
-import com.letscode.moveisbattle.model.Game;
 import com.letscode.moveisbattle.model.Question;
 import com.letscode.moveisbattle.model.request.GuessResquest;
 import com.letscode.moveisbattle.model.response.ResultResponse;
@@ -11,7 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
