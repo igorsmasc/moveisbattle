@@ -1,5 +1,6 @@
 package com.letscode.moveisbattle.service.impl;
 
+import com.letscode.moveisbattle.dto.NewUserDTO;
 import com.letscode.moveisbattle.model.AppUser;
 import com.letscode.moveisbattle.model.ConfirmationToken;
 import com.letscode.moveisbattle.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -31,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String signUpUser(AppUser appUser) {
+    public NewUserDTO signUpUser(AppUser appUser) {
         boolean userExists = userRepository.findByEmail(appUser.getEmail()).isPresent();
 
         if (userExists) {
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPassword);
 
-        userRepository.save(appUser);
+        AppUser savedUser = userRepository.save(appUser);
 
 
         String token = UUID.randomUUID().toString();
@@ -55,7 +57,8 @@ public class UserServiceImpl implements UserService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        return token;
+        NewUserDTO newUserDTO = new NewUserDTO(savedUser.getId(), token);
+        return newUserDTO;
     }
 
     @Override

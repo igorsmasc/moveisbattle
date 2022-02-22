@@ -95,7 +95,17 @@ class UserServiceImplTest {
                 "password",
                 UserRole.USER);
 
+        AppUser appUserWithId = new AppUser(
+                "igor",
+                "mascarenhas",
+                "igorsmascarenhas@gmail.com",
+                "password",
+                UserRole.USER);
+
+        appUserWithId.setId(1L);
+
         given(userRepository.findByEmail(appUser.getEmail())).willReturn(Optional.empty());
+        given(userRepository.save(appUser)).willReturn(appUserWithId);
 
         // when
         underTest.signUpUser(appUser);

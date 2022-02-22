@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/users/status")
+@RequestMapping(value = "/api/users")
 @Api(value = "User Status")
 @CrossOrigin(origins = "*")
 public class UserStatusController {

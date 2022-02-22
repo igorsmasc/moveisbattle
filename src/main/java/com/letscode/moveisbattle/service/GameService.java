@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface GameService {
     ResponseEntity<Question> startGame(Long userId);
 
-    ResponseEntity<Game> stopGame(Long userId, String gameId);
+    ResponseEntity<ResultResponse> stopGame(Long userId, String gameId);
 
     Game saveGame(Game game);
 

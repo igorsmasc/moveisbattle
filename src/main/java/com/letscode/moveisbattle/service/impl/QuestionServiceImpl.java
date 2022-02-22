@@ -33,8 +33,10 @@ public class QuestionServiceImpl implements QuestionService {
 
         while (!validMovies) {
             rand = new Random();
-            m1 = rand.nextInt((7 - 1) + 1) + 1;
-            m2 = rand.nextInt((7 - 1) + 1) + 1;
+            while (m1 == m2) {
+                m1 = rand.nextInt((10 - 1) + 1) + 1;
+                m2 = rand.nextInt((10 - 1) + 1) + 1;
+            }
             questionHash01 = game.getId() + m1 + m2;
             questionHash02 = game.getId() + m2 + m1;
 

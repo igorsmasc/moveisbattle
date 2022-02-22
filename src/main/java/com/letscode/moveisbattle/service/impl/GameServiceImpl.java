@@ -37,7 +37,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public ResponseEntity<Game> stopGame(Long userId, String gameId) {
+    public ResponseEntity<ResultResponse> stopGame(Long userId, String gameId) {
         Optional<Game> gameOptional = getGame(gameId);
         Optional<UserStatus> userStatusOptional = userStatusService.getUserStatus(userId);
 
@@ -53,7 +53,10 @@ public class GameServiceImpl implements GameService {
         UserStatus userStatus = userStatusOptional.get();
 
         if (!game.isValidGame()) {
-            return ResponseEntity.ok(game);
+            return ResponseEntity.ok(new ResultResponse(
+                    game.getRightAnswers(),
+                    "Ooops! Your game is invalid to stop!",
+                    game.getId()));
         }
 
         game.setValidGame(false);
@@ -62,7 +65,14 @@ public class GameServiceImpl implements GameService {
         saveGame(game);
         userStatusService.saveUserStatus(userStatus);
 
-        return ResponseEntity.ok(game);
+        ResultResponse resultResponse = new ResultResponse(
+                "Ooops! You was wrong!",
+                game.getRightAnswers(),
+                "Game Over!",
+                game.getLastQuestionId(),
+                game.getId());
+
+        return ResponseEntity.ok(resultResponse);
     }
 
     @Override
@@ -117,23 +127,16 @@ public class GameServiceImpl implements GameService {
                 game.setWrongAnswers(game.getWrongAnswers() + 1);
 
                 if (game.getWrongAnswers() == 3) {
-                    game.setValidGame(false);
+                    return stopGame(game.getUserId(), game.getId());
                 }
             }
         }
 
         result.setPoints(game.getRightAnswers());
-
-        if (game.isValidGame()) {
-            Question newQuestion = questionService.generateQuestion(game);
-            game.setLastQuestion(newQuestion.getQuestionId());
-            saveGame(game);
-            result.setLastQuestion(newQuestion);
-            return ResponseEntity.ok(result);
-        }
-
+        Question newQuestion = questionService.generateQuestion(game);
+        game.setLastQuestion(newQuestion.getQuestionId());
         saveGame(game);
-        result.setGameStatus("Game Over!");
+        result.setLastQuestion(newQuestion);
         return ResponseEntity.ok(result);
     }
 

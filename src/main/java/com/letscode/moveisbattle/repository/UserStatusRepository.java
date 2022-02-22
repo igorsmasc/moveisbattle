@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface UserStatusRepository extends JpaRepository<UserStatus, Long> {
-    @Query(nativeQuery = true, value = "SELECT * FROM USER ORDER BY SCORE DESC LIMIT :rankingSize")
+    @Query(nativeQuery = true, value = "SELECT * FROM USER_STATUS ORDER BY SCORE DESC LIMIT :rankingSize")
     List<UserStatus> getRankingBySize(@Param("rankingSize") int rankingSize);
 }

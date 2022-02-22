@@ -33,7 +33,7 @@ public class UserStatus {
 
         if (totalAnswers == 0) return;
 
-        Double calcRate = (Double.valueOf(allTimeRightAnswers) / totalAnswers) * 100;
+        Double calcRate = (Double.valueOf(allTimeRightAnswers) / totalAnswers);
         setUserRate(calcRate);
 
         this.score = this.quizzes * this.userRate;

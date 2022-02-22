@@ -102,7 +102,7 @@ class GameServiceImplTest {
         given(userStatusService.getUserStatus(userStatus.getUserId())).willReturn(Optional.of(userStatus));
 
         // When
-        ResponseEntity<Game> responseEntity = underTest.stopGame(userStatus.getUserId(), invalidGameId);
+        ResponseEntity<ResultResponse> responseEntity = underTest.stopGame(userStatus.getUserId(), invalidGameId);
 
         // Then
         verify(gameRepository, times(0)).save(any());
@@ -124,7 +124,7 @@ class GameServiceImplTest {
         given(userStatusService.getUserStatus(invalidUserStatusId)).willReturn(Optional.empty());
 
         // When
-        ResponseEntity<Game> responseEntity = underTest.stopGame(invalidUserStatusId, game.getId());
+        ResponseEntity<ResultResponse> responseEntity = underTest.stopGame(invalidUserStatusId, game.getId());
 
         // Then
         verify(gameRepository, times(0)).save(any());
@@ -202,7 +202,7 @@ class GameServiceImplTest {
         given(userStatusService.getUserStatus(userStatus.getUserId())).willReturn(Optional.of(userStatus));
 
         // When
-        ResponseEntity<Game> responseEntity = underTest.stopGame(userStatus.getUserId(), game.getId());
+        ResponseEntity<ResultResponse> responseEntity = underTest.stopGame(userStatus.getUserId(), game.getId());
 
         // Then
         verify(gameRepository, times(0)).save(any());
@@ -407,6 +407,7 @@ class GameServiceImplTest {
         given(movieService.getMovie(any())).willReturn(movie01).willReturn(movie02);
         given(underTest.getGame(game.getId())).willReturn(Optional.of(game));
         given(underTest.saveGame(any())).willReturn(game);
+        given(userStatusService.getUserStatus(game.getUserId())).willReturn(Optional.of(userStatus));
 
         // When
         ResponseEntity<ResultResponse> responseEntity = underTest.guess(guessResquest);

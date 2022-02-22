@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
     private final GameService gameService;
 
-    @GetMapping("/start")
+    @PostMapping("/start")
     @ApiOperation(value = "Iniciar um novo jogo")
     public ResponseEntity<Question> startGame() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -33,11 +33,11 @@ public class GameController {
 
     @PostMapping("/stop/{userId}/game/{gameId}")
     @ApiOperation(value = "Encerrar um jogo")
-    public ResponseEntity<Game> stopGame(@RequestParam Long userId, @RequestParam String gameId) {
+    public ResponseEntity<ResultResponse> stopGame(@RequestParam Long userId, @RequestParam String gameId) {
         return gameService.stopGame(userId, gameId);
     }
 
-    @GetMapping("/guess")
+    @PostMapping("/guess")
     @ApiOperation(value = "Dar um palpite em um derterminado jogo")
     public ResponseEntity<ResultResponse> guess(@RequestBody GuessResquest guessResquest) {
         return gameService.guess(guessResquest);

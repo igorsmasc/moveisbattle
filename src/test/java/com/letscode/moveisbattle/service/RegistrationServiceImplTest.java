@@ -1,7 +1,9 @@
 package com.letscode.moveisbattle.service;
 
+import com.letscode.moveisbattle.dto.NewUserDTO;
 import com.letscode.moveisbattle.model.AppUser;
 import com.letscode.moveisbattle.model.ConfirmationToken;
+import com.letscode.moveisbattle.model.UserStatus;
 import com.letscode.moveisbattle.model.enums.UserRole;
 import com.letscode.moveisbattle.model.request.RegistrationRequest;
 import com.letscode.moveisbattle.service.impl.RegistrationServiceImpl;
@@ -27,6 +29,9 @@ class RegistrationServiceImplTest {
     private UserService userService;
 
     @Mock
+    private UserStatusService userStatusService;
+
+    @Mock
     private EmailValidator emailValidator;
 
     @Mock
@@ -36,7 +41,7 @@ class RegistrationServiceImplTest {
 
     @BeforeEach
     void setup() {
-        underTest = new RegistrationServiceImpl(userService, emailValidator, confirmationTokenService);
+        underTest = new RegistrationServiceImpl(userService, userStatusService, emailValidator, confirmationTokenService);
     }
 
     @Test
@@ -51,6 +56,8 @@ class RegistrationServiceImplTest {
                 request.getEmail(),
                 request.getPassword(),
                 UserRole.USER);
+
+        given(userService.signUpUser(appUser)).willReturn(new NewUserDTO(1L, "token"));
 
         // when
         underTest.register(request);
