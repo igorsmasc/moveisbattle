@@ -24,7 +24,7 @@ public class GameServiceImpl implements GameService {
     private UserStatusService userStatusService;
 
     @Override
-    public Question startGame(Long userId) {
+    public ResponseEntity<Question> startGame(Long userId) {
         Game game = new Game(userId);
         game = saveGame(game);
 
@@ -33,7 +33,7 @@ public class GameServiceImpl implements GameService {
 
         saveGame(game);
 
-        return question;
+        return ResponseEntity.ok(question);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class GameServiceImpl implements GameService {
             return ResponseEntity.notFound().build();
         }
 
-        if (gameOptional.isEmpty() || userStatusOptional.isEmpty()) {
-            throw new IllegalStateException("Game or UserStatus is invalid!");
+        if (userStatusOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
 
         Game game = gameOptional.get();

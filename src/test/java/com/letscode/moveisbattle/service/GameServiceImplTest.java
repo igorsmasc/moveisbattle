@@ -110,6 +110,28 @@ public class GameServiceImplTest {
     }
 
     @Test
+    void shouldReturnNotFoundWhenStopAndUserStatusDoesntExists() {
+        // Given
+        Long invalidUserStatusId = 1L;
+
+        Game game = new Game(invalidUserStatusId);
+        game.setId("test-invalid-game-id");
+        game.setLastQuestionId("test-game-id0102");
+        game.setValidGame(true);
+
+        given(underTest.getGame(game.getId())).willReturn(Optional.of(game));
+        given(userStatusService.getUserStatus(invalidUserStatusId)).willReturn(Optional.empty());
+
+        // When
+        ResponseEntity<Game> responseEntity = underTest.stopGame(invalidUserStatusId, game.getId());
+
+        // Then
+        verify(gameRepository, times(0)).save(any());
+        verify(userStatusService, times(0)).saveUserStatus(any());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
     void shouldReturnNotFoundWhenGuessAndGameDoesntExists() {
         // Given
         UserStatus userStatus = new UserStatus(1L);

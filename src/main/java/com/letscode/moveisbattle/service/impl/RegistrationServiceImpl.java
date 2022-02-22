@@ -32,7 +32,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         return userService.signUpUser(new AppUser(
                 request.getFirstName(),
-                request.getFirstName(),
+                request.getLastName(),
                 request.getEmail(),
                 request.getPassword(),
                 UserRole.USER
