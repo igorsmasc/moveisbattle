@@ -10,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -36,17 +34,17 @@ class QuestionServiceImplTest {
         Game game = new Game(userStatus.getUserId());
         game.setId("test-game-id");
 
-        Movie m1 = new Movie("01", "id-imdb-01", "movie 01", 2020, 9.0, "genre", "type");
-        Movie m2 = new Movie("02", "id-imdb-02", "movie 02", 2020, 9.2, "genre", "type");
+        Movie movie01 = new Movie("01", "id-imdb-01", "movie 01", 9.0);
+        Movie movie02 = new Movie("02", "id-imdb-02", "movie 02", 9.2);
 
-        given(movieService.getMovie(any())).willReturn(Optional.of(m1)).willReturn(Optional.of(m2));
+        given(movieService.getMovie(any())).willReturn(movie01).willReturn(movie02);
 
         // When
         Question question = underTest.generateQuestion(game);
 
         // Then
         Assertions.assertEquals(question.getGameId(), game.getId());
-        Assertions.assertEquals(question.getMovie01(), MovieDTO.fromDomain(m1));
-        Assertions.assertEquals(question.getMovie02(), MovieDTO.fromDomain(m2));
+        Assertions.assertEquals(question.getMovie01(), MovieDTO.fromDomain(movie01));
+        Assertions.assertEquals(question.getMovie02(), MovieDTO.fromDomain(movie02));
     }
 }

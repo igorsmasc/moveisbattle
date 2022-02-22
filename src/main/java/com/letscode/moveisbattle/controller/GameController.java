@@ -1,5 +1,6 @@
 package com.letscode.moveisbattle.controller;
 
+import com.letscode.moveisbattle.model.AppUser;
 import com.letscode.moveisbattle.model.Game;
 import com.letscode.moveisbattle.model.Question;
 import com.letscode.moveisbattle.model.request.GuessResquest;
@@ -9,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,9 +22,12 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
     private final GameService gameService;
 
-    @PostMapping("/start/{userId}/game")
+    @GetMapping("/start")
     @ApiOperation(value = "Iniciar um novo jogo")
-    public ResponseEntity<Question> startGame(Long userId) {
+    public ResponseEntity<Question> startGame() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = ((AppUser) principal).getId();
+
         return gameService.startGame(userId);
     }
 
@@ -31,7 +37,7 @@ public class GameController {
         return gameService.stopGame(userId, gameId);
     }
 
-    @PostMapping("/guess")
+    @GetMapping("/guess")
     @ApiOperation(value = "Dar um palpite em um derterminado jogo")
     public ResponseEntity<ResultResponse> guess(@RequestBody GuessResquest guessResquest) {
         return gameService.guess(guessResquest);

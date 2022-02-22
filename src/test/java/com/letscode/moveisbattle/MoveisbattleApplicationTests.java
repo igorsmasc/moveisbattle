@@ -59,11 +59,7 @@ class MoveisbattleApplicationTests {
         Assertions.assertNotNull(registrationService);
         Assertions.assertNotNull(userService);
         Assertions.assertNotNull(userStatusService);
-    }
 
-    @Test
-    public void applicationContextTest() {
         MoveisbattleApplication.main(new String[]{});
     }
-
 }

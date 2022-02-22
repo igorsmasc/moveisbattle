@@ -16,18 +16,12 @@ public class Movie {
     private String id;
     private String imdbId;
     private String title;
-    private Integer year;
     private Double rating;
-    private String genre;
-    private String type;
 
-    public Movie(String id, String imdbId, String title, Integer year, Double rating, String genre, String type) {
+    public Movie(String id, String imdbId, String title, Double rating) {
         this.id = id;
         this.imdbId = imdbId;
         this.title = title;
-        this.year = year;
         this.rating = rating;
-        this.genre = genre;
-        this.type = type;
     }
 }

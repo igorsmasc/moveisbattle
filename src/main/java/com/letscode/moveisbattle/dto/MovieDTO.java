@@ -4,18 +4,15 @@ import com.letscode.moveisbattle.model.Movie;
 import lombok.*;
 
 @Getter
+@AllArgsConstructor
 @EqualsAndHashCode
 @Builder
 public class MovieDTO {
     private String id;
+    private String imdbId;
     private String title;
 
-    public MovieDTO(String id, String title) {
-        this.id = id;
-        this.title = title;
-    }
-
     public static MovieDTO fromDomain(Movie movie) {
-        return MovieDTO.builder().id(movie.getId()).title(movie.getTitle()).build();
+        return MovieDTO.builder().id(movie.getId()).imdbId(movie.getImdbId()).title(movie.getTitle()).build();
     }
 }

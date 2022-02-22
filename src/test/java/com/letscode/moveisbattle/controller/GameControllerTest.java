@@ -25,18 +25,6 @@ class GameControllerTest {
     }
 
     @Test
-    void shouldStartGame() {
-        // Given
-        Long appUserId = 1L;
-
-        // When
-        underTest.startGame(appUserId);
-
-        // Then
-        verify(gameService, times(1)).startGame(appUserId);
-    }
-
-    @Test
     void shouldStopGame() {
         // Given
         Long appUserId = 1L;
@@ -60,5 +48,4 @@ class GameControllerTest {
         // Then
         verify(gameService, times(1)).guess(guessResquest);
     }
-
 }

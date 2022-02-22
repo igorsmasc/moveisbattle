@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping(path = "/api/user/registration")
 @Api(value = "Registration")
-@CrossOrigin(origins = "*")
 public class RegistrationController {
 
     private final RegistrationService registrationService;

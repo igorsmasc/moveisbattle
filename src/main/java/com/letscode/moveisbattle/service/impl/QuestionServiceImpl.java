@@ -8,7 +8,6 @@ import com.letscode.moveisbattle.service.MovieService;
 import com.letscode.moveisbattle.service.QuestionService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -24,7 +23,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question generateQuestion(Game game) {
-
         boolean validMovies = false;
 
         Integer m1 = null;
@@ -45,14 +43,9 @@ public class QuestionServiceImpl implements QuestionService {
             }
         }
 
-        Optional<Movie> optionalMovie01 = movieService.getMovie(String.valueOf(m1));
-        Optional<Movie> optionalMovie02 = movieService.getMovie(String.valueOf(m2));
+        Movie movie01 = movieService.getMovie(String.valueOf(m1));
+        Movie movie02 = movieService.getMovie(String.valueOf(m2));
 
-        if (optionalMovie01.isEmpty() || optionalMovie02.isEmpty()) {
-            throw new IllegalStateException("Invalid movie!");
-        }
-
-
-        return new Question(game.getId(), MovieDTO.fromDomain(optionalMovie01.get()), MovieDTO.fromDomain(optionalMovie02.get()));
+        return new Question(game.getId(), MovieDTO.fromDomain(movie01), MovieDTO.fromDomain(movie02));
     }
 }

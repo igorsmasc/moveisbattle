@@ -103,7 +103,7 @@ class UserServiceImplTest {
         // then
         ArgumentCaptor<AppUser> appUserArgumentCaptor = ArgumentCaptor.forClass(AppUser.class);
         verify(userRepository, times(1)).save(appUserArgumentCaptor.capture());
-        Assertions.assertTrue(appUser.equals(appUserArgumentCaptor.getValue()));
+        Assertions.assertEquals(appUser, appUserArgumentCaptor.getValue());
 
         Assertions.assertEquals(appUser.getAuthorities(), appUserArgumentCaptor.getValue().getAuthorities());
         Assertions.assertEquals(appUser.getUsername(), appUserArgumentCaptor.getValue().getUsername());

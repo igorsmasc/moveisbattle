@@ -86,16 +86,10 @@ public class GameServiceImpl implements GameService {
             return ResponseEntity.status(404).body(result);
         }
 
-        Optional<Movie> optionalMovie01 = movieService.getMovie(guessResquest.getMovie01());
-        Optional<Movie> optionalMovie02 = movieService.getMovie(guessResquest.getMovie02());
-
-        if (optionalMovie01.isEmpty() || optionalMovie02.isEmpty()) {
-            throw new IllegalStateException("Invalid movies");
-        }
+        Movie movie01 = movieService.getMovie(guessResquest.getMovie01());
+        Movie movie02 = movieService.getMovie(guessResquest.getMovie02());
 
         Game game = gameOptional.get();
-        Movie movie01 = optionalMovie01.get();
-        Movie movie02 = optionalMovie02.get();
         String questionHash = game.getId() + movie01.getId() + movie02.getId();
 
 

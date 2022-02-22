@@ -2,7 +2,6 @@ package com.letscode.moveisbattle.service;
 
 import com.letscode.moveisbattle.model.AppUser;
 import com.letscode.moveisbattle.model.ConfirmationToken;
-import com.letscode.moveisbattle.model.Game;
 import com.letscode.moveisbattle.model.enums.UserRole;
 import com.letscode.moveisbattle.model.request.RegistrationRequest;
 import com.letscode.moveisbattle.service.impl.RegistrationServiceImpl;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

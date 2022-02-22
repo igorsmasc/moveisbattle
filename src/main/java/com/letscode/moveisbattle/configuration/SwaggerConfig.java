@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -29,8 +28,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo metaInfo() {
-
-        ApiInfo apiInfo = new ApiInfo(
+        return new ApiInfo(
                 "Movies Battle API REST",
                 "API REST - Desafio Lets Code.",
                 "1.0",
@@ -39,7 +37,5 @@ public class SwaggerConfig {
                         "igorsmascarenhas@gmail.com"),
                 "License - MIT", "https://opensource.org/licenses/MIT", new ArrayList<>()
         );
-
-        return apiInfo;
     }
 }

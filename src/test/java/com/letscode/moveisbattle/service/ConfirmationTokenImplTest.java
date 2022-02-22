@@ -45,7 +45,7 @@ class ConfirmationTokenImplTest {
         // Then
         ArgumentCaptor<ConfirmationToken> confirmationTokenArgumentCaptor = ArgumentCaptor.forClass(ConfirmationToken.class);
         verify(confirmationTokenRepository, times(1)).save(confirmationTokenArgumentCaptor.capture());
-        Assertions.assertTrue(confirmationToken.equals(confirmationTokenArgumentCaptor.getValue()));
+        Assertions.assertEquals(confirmationToken, confirmationTokenArgumentCaptor.getValue());
     }
 
     @Test

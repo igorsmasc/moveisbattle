@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
-    private final static String USER_NOT_FOUND_MSG = "User with email %s not found";
+    private static final String USER_NOT_FOUND_MSG = "User with email %s not found";
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -54,8 +54,6 @@ public class UserServiceImpl implements UserService {
         );
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-        // TODO: Send Confirmation Email
 
         return token;
     }

@@ -15,7 +15,13 @@ public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
 
     @Override
-    public Optional<Movie> getMovie(String id) {
-        return movieRepository.findById(id);
+    public Movie getMovie(String id) {
+        Optional<Movie> movieOptional = movieRepository.findById(id);
+
+        if (movieOptional.isEmpty()) {
+            throw new IllegalStateException("Movie id " + id + " is invalid");
+        }
+
+        return movieOptional.get();
     }
 }
