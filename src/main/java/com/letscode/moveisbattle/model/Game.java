@@ -8,10 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-@NoArgsConstructor
-@Entity
 @Getter
 @Setter
+@EqualsAndHashCode
+@NoArgsConstructor
+@Entity
 public class Game implements Serializable {
 
     @Id

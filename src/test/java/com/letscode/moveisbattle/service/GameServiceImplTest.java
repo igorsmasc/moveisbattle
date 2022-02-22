@@ -25,7 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class GameServiceImplTest {
+class GameServiceImplTest {
 
     @Mock
     private GameRepository gameRepository;
@@ -67,6 +67,7 @@ public class GameServiceImplTest {
         // Then
         ArgumentCaptor<Game> gameArgumentCaptor = ArgumentCaptor.forClass(Game.class);
         verify(gameRepository, times(2)).save(gameArgumentCaptor.capture());
+        Assertions.assertTrue(game.equals(gameArgumentCaptor.getValue()));
     }
 
     @Test
@@ -185,7 +186,7 @@ public class GameServiceImplTest {
 
         // Then
         Assertions.assertEquals("Invalid question for selected game", responseEntity.getBody().getGameStatus());
-        Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
@@ -206,7 +207,7 @@ public class GameServiceImplTest {
         // Then
         verify(gameRepository, times(0)).save(any());
         verify(userStatusService, times(0)).saveUserStatus(any());
-        Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     @Test
@@ -223,6 +224,7 @@ public class GameServiceImplTest {
         // Then
         ArgumentCaptor<Game> gameArgumentCaptor = ArgumentCaptor.forClass(Game.class);
         verify(gameRepository, times(1)).save(gameArgumentCaptor.capture());
+        Assertions.assertTrue(game.equals(gameArgumentCaptor.getValue()));
     }
 
     @Test
@@ -381,6 +383,31 @@ public class GameServiceImplTest {
         Assertions.assertEquals(rightAnswers, game.getRightAnswers());
         Assertions.assertEquals(wrongAnswers, game.getWrongAnswers());
         Assertions.assertEquals("Ooops! You was wrong!", responseEntity.getBody().getLastGuessResult());
+    }
+
+    @Test
+    void whenGuessAndMovieIsInvalidShouldThrowIllegalStateException() {
+        // Given
+        UserStatus userStatus = new UserStatus(1L);
+
+        Question question = new Question();
+        question.setQuestionId("1");
+
+        Game game = new Game(userStatus.getUserId());
+        game.setId("test-game-id");
+        game.setLastQuestionId("test-game-id0102");
+        game.setValidGame(true);
+
+        Movie m1 = new Movie("01", "id-imdb-01", "movie 01", 2020, 9.0, "genre", "type");
+        Movie m2 = new Movie("02", "id-imdb-02", "movie 02", 2020, 9.2, "genre", "type");
+
+        GuessResquest guessResquest = new GuessResquest(game.getId(), m1.getId(), m2.getId(), m1.getId());
+
+        given(underTest.getGame(game.getId())).willReturn(Optional.of(game));
+        given(movieService.getMovie(any())).willReturn(Optional.of(m1)).willReturn(Optional.empty());
+
+        // Then
+        Assertions.assertThrows(IllegalStateException.class, () -> underTest.guess(guessResquest));
     }
 
     @Test

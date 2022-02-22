@@ -1,6 +1,7 @@
 package com.letscode.moveisbattle.service;
 
 import com.letscode.moveisbattle.model.AppUser;
+import com.letscode.moveisbattle.model.ConfirmationToken;
 import com.letscode.moveisbattle.model.Game;
 import com.letscode.moveisbattle.model.enums.UserRole;
 import com.letscode.moveisbattle.model.request.RegistrationRequest;
@@ -15,12 +16,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.Assert;
 
-import static org.mockito.ArgumentMatchers.any;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class RegistrationServiceImplTest {
+class RegistrationServiceImplTest {
 
     @Mock
     private UserService userService;
@@ -72,6 +75,90 @@ public class RegistrationServiceImplTest {
 
         // Then
         Assertions.assertThrows(IllegalStateException.class, () -> underTest.register(request));
+    }
+
+    @Test
+    void whenUsingValidTokenShouldConfirm() {
+        // given
+        String validToken = "valid-token";
+
+        AppUser appUser = new AppUser("first name", "last name", "email@mail.com", "password", UserRole.USER);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                1L,
+                validToken,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                null,
+                appUser
+        );
+
+        given(confirmationTokenService.getToken(validToken)).willReturn(Optional.of(confirmationToken));
+
+        // when
+        String response = underTest.confirmToken(validToken);
+
+        // Then
+        verify(confirmationTokenService, times(1)).getToken(validToken);
+        Assertions.assertEquals("confirmed", response);
+    }
+
+    @Test
+    void whenUsingInvalidTokenShouldThrowIllegalStateException() {
+        // given
+        String invalidToken = "invalid-token";
+
+        AppUser appUser = new AppUser("first name", "last name", "email@mail.com", "password", UserRole.USER);
+
+
+        given(confirmationTokenService.getToken(invalidToken)).willReturn(Optional.empty());
+
+        // Then
+        Assertions.assertThrows(IllegalStateException.class, () -> underTest.confirmToken(invalidToken));
+    }
+
+    @Test
+    void whenUsingAlreadyConfirmedEmailShouldThrowIllegalStateException() {
+        // given
+        String validToken = "valid-token";
+
+        AppUser appUser = new AppUser("first name", "last name", "email@mail.com", "password", UserRole.USER);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                1L,
+                validToken,
+                LocalDateTime.now().minusMinutes(5),
+                LocalDateTime.now().plusMinutes(15),
+                LocalDateTime.now(),
+                appUser
+        );
+
+        given(confirmationTokenService.getToken(validToken)).willReturn(Optional.of(confirmationToken));
+
+        // Then
+        Assertions.assertThrows(IllegalStateException.class, () -> underTest.confirmToken(validToken));
+    }
+
+    @Test
+    void whenUsingAExpiredTokenShouldThrowIllegalStateException() {
+        // given
+        String expiredToken = "expired-token";
+
+        AppUser appUser = new AppUser("first name", "last name", "email@mail.com", "password", UserRole.USER);
+
+        ConfirmationToken expiredConfirmationToken = new ConfirmationToken(
+                1L,
+                expiredToken,
+                LocalDateTime.now().minusMinutes(15),
+                LocalDateTime.now().minusMinutes(5),
+                null,
+                appUser
+        );
+
+        given(confirmationTokenService.getToken(expiredToken)).willReturn(Optional.of(expiredConfirmationToken));
+
+        // Then
+        Assertions.assertThrows(IllegalStateException.class, () -> underTest.confirmToken(expiredToken));
     }
 
 }

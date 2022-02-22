@@ -12,7 +12,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class RegistrationControllerTest {
+class RegistrationControllerTest {
 
     @Mock
     private RegistrationService registrationService;

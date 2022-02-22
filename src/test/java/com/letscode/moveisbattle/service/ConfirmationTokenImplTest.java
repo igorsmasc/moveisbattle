@@ -5,9 +5,11 @@ import com.letscode.moveisbattle.model.ConfirmationToken;
 import com.letscode.moveisbattle.model.enums.UserRole;
 import com.letscode.moveisbattle.repository.ConfirmationTokenRepository;
 import com.letscode.moveisbattle.service.impl.ConfirmationTokenServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -18,7 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ConfirmationTokenImplTest {
+class ConfirmationTokenImplTest {
 
     @Mock
     private ConfirmationTokenRepository confirmationTokenRepository;
@@ -41,7 +43,9 @@ public class ConfirmationTokenImplTest {
         underTest.saveConfirmationToken(confirmationToken);
 
         // Then
-        verify(confirmationTokenRepository, times(1)).save(confirmationToken);
+        ArgumentCaptor<ConfirmationToken> confirmationTokenArgumentCaptor = ArgumentCaptor.forClass(ConfirmationToken.class);
+        verify(confirmationTokenRepository, times(1)).save(confirmationTokenArgumentCaptor.capture());
+        Assertions.assertTrue(confirmationToken.equals(confirmationTokenArgumentCaptor.getValue()));
     }
 
     @Test

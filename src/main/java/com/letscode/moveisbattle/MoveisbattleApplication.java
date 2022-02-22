@@ -35,6 +35,5 @@ public class MoveisbattleApplication implements CommandLineRunner {
         Movie m7 = new Movie("7", "tt3450958", "War for the Planet of the Apes", 2017, 7.4, "Action, Adventure, Drama", movie);
 
         movieRepository.saveAll(Arrays.asList(m1, m2, m3, m4, m5, m6, m7));
-
     }
 }

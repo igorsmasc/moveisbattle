@@ -2,11 +2,13 @@ package com.letscode.moveisbattle.service.impl;
 
 import com.letscode.moveisbattle.dto.MovieDTO;
 import com.letscode.moveisbattle.model.Game;
+import com.letscode.moveisbattle.model.Movie;
 import com.letscode.moveisbattle.model.Question;
 import com.letscode.moveisbattle.service.MovieService;
 import com.letscode.moveisbattle.service.QuestionService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -43,6 +45,14 @@ public class QuestionServiceImpl implements QuestionService {
             }
         }
 
-        return new Question(game.getId(), MovieDTO.fromDomain(movieService.getMovie(String.valueOf(m1)).get()), MovieDTO.fromDomain(movieService.getMovie(String.valueOf(m2)).get()));
+        Optional<Movie> optionalMovie01 = movieService.getMovie(String.valueOf(m1));
+        Optional<Movie> optionalMovie02 = movieService.getMovie(String.valueOf(m2));
+
+        if (optionalMovie01.isEmpty() || optionalMovie02.isEmpty()) {
+            throw new IllegalStateException("Invalid movie!");
+        }
+
+
+        return new Question(game.getId(), MovieDTO.fromDomain(optionalMovie01.get()), MovieDTO.fromDomain(optionalMovie02.get()));
     }
 }

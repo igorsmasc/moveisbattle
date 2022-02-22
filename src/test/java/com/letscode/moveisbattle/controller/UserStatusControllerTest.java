@@ -11,7 +11,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class UserStatusControllerTest {
+class UserStatusControllerTest {
 
     @Mock
     private UserStatusService userStatusService;
@@ -34,5 +34,4 @@ public class UserStatusControllerTest {
         // then
         verify(userStatusService, times(1)).getUserStatusRanking(rankingSize);
     }
-
 }

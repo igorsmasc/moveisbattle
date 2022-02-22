@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class QuestionServiceImplTest {
+class QuestionServiceImplTest {
 
     @Mock
     private MovieService movieService;
