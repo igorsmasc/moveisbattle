@@ -31,7 +31,7 @@ public class GameController {
 
     @PostMapping("/stop/{userId}/game/{gameId}")
     @ApiOperation(value = "Encerrar um jogo")
-    public ResponseEntity<ResultResponse> stopGame(@RequestParam Long userId, @RequestParam String gameId) {
+    public ResponseEntity<ResultResponse> stopGame(@PathVariable Long userId, @PathVariable String gameId) {
         return gameService.stopGame(userId, gameId);
     }
 

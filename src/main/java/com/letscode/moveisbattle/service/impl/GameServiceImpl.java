@@ -66,7 +66,6 @@ public class GameServiceImpl implements GameService {
         userStatusService.saveUserStatus(userStatus);
 
         ResultResponse resultResponse = new ResultResponse(
-                "Ooops! You was wrong!",
                 game.getRightAnswers(),
                 "Game Over!",
                 game.getLastQuestionId(),
@@ -100,43 +99,48 @@ public class GameServiceImpl implements GameService {
         Movie movie02 = movieService.getMovie(guessResquest.getMovie02());
 
         Game game = gameOptional.get();
-        String questionHash = game.getId() + movie01.getId() + movie02.getId();
 
+        if (!game.isValidGame()) {
+            result.setGameStatus("That game is not valid!");
+            return ResponseEntity.unprocessableEntity().body(result);
+        }
+
+        String questionHash = game.getId() + movie01.getId() + movie02.getId();
 
         if (!questionHash.equals(game.getLastQuestionId())) {
             result.setGameStatus("Invalid question for selected game");
             return ResponseEntity.status(400).body(result);
         }
 
-        if (game.isValidGame()) {
-            String bestMovieId;
+        String bestMovieId;
 
-            if (movie01.getRating() > movie02.getRating()) {
-                bestMovieId = movie01.getId();
-            } else if (movie01.getRating() < movie02.getRating()) {
-                bestMovieId = movie02.getId();
-            } else {
-                bestMovieId = "same";
-            }
+        if (movie01.getRating() > movie02.getRating()) {
+            bestMovieId = movie01.getId();
+        } else if (movie01.getRating() < movie02.getRating()) {
+            bestMovieId = movie02.getId();
+        } else {
+            bestMovieId = "same";
+        }
 
-            if (bestMovieId.equals(guessResquest.getGuess()) || bestMovieId.equals("same")) {
-                result.setLastGuessResult("You was right!");
-                game.setRightAnswers(game.getRightAnswers() + 1);
-            } else {
-                result.setLastGuessResult("Ooops! You was wrong!");
-                game.setWrongAnswers(game.getWrongAnswers() + 1);
+        if (bestMovieId.equals(guessResquest.getGuess()) || bestMovieId.equals("same")) {
+            result.setLastGuessResult("You was right!");
+            game.setRightAnswers(game.getRightAnswers() + 1);
+        } else {
+            result.setLastGuessResult("Ooops! You was wrong!");
+            game.setWrongAnswers(game.getWrongAnswers() + 1);
 
-                if (game.getWrongAnswers() == 3) {
-                    return stopGame(game.getUserId(), game.getId());
-                }
+            if (game.getWrongAnswers() == 3) {
+                return stopGame(game.getUserId(), game.getId());
             }
         }
+
 
         result.setPoints(game.getRightAnswers());
         Question newQuestion = questionService.generateQuestion(game);
         game.setLastQuestion(newQuestion.getQuestionId());
         saveGame(game);
         result.setLastQuestion(newQuestion);
+
         return ResponseEntity.ok(result);
     }
 
