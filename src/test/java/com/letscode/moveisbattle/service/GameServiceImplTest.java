@@ -279,6 +279,35 @@ class GameServiceImplTest {
     }
 
     @Test
+    void whenDoesntExistsShouldReturn404() {
+        // Given
+        UserStatus userStatus = new UserStatus(1L);
+
+        Question question = new Question();
+        question.setQuestionId("1");
+
+        Game game = new Game(userStatus.getUserId());
+        game.setId("test-game-id");
+        game.setLastQuestionId("test-game-id0102");
+        game.setValidGame(true);
+
+        Movie movie01 = new Movie("01", "id-imdb-01", "movie 01", 9.7);
+        Movie movie02 = new Movie("02", "id-imdb-02", "movie 02", 9.2);
+
+        GuessResquest guessResquest = new GuessResquest(game.getId(), movie01.getId(), movie02.getId(), movie01.getId());
+
+        given(underTest.getGame(game.getId())).willReturn(Optional.empty());
+
+        // When
+        ResponseEntity<ResultResponse> responseEntity = underTest.guess(guessResquest);
+
+        // Then
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        Assertions.assertEquals("Game not found", responseEntity.getBody().getGameStatus());
+    }
+
+    @Test
+
     void shouldGuessSecondMovieAndAnswerRightSuccessfully() {
         // Given
         UserStatus userStatus = new UserStatus(1L);
@@ -418,7 +447,6 @@ class GameServiceImplTest {
 
         Assertions.assertEquals(rightAnswers, game.getRightAnswers());
         Assertions.assertEquals(wrongAnswers, game.getWrongAnswers());
-        Assertions.assertEquals("Ooops! You was wrong!", responseEntity.getBody().getLastGuessResult());
         Assertions.assertEquals("Game Over!", responseEntity.getBody().getGameStatus());
     }
 }

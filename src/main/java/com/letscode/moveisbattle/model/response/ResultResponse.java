@@ -25,8 +25,7 @@ public class ResultResponse {
         this.gameId = gameId;
     }
 
-    public ResultResponse(String lastGuessResult, Integer points, String gameStatus, String lastQuestionId, String gameId) {
-        this.lastGuessResult = lastGuessResult;
+    public ResultResponse(Integer points, String gameStatus, String lastQuestionId, String gameId) {
         this.points = points;
         this.gameStatus = gameStatus;
         this.lastQuestionId = lastQuestionId;
